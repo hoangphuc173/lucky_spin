@@ -1,0 +1,342 @@
+/* ============================================
+   TET ATMOSPHERE (LUNAR NEW YEAR)
+   ============================================ */
+
+/* Typography Update */
+h1 {
+    font-family: 'Dancing Script', cursive !important;
+    letter-spacing: 2px;
+    font-size: 3.5rem !important;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.gradient-text {
+    font-family: 'Dancing Script', cursive !important;
+    background: linear-gradient(to right, #FFD700, #FFF8DC, #FFD700);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: none;
+    filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.5));
+}
+
+/* Hanging Lanterns */
+.lantern-container {
+    position: fixed;
+    top: -20px;
+    z-index: 9999 !important;
+    /* Force on top */
+    transform-origin: top center;
+    animation: lanternSway 3s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
+.lantern-container.left {
+    left: 40px;
+    animation-delay: 0.5s;
+}
+
+.lantern-container.right {
+    right: 40px;
+    animation-delay: 1.5s;
+}
+
+.lantern-string {
+    width: 4px;
+    height: 80px;
+    background: #8B0000;
+    margin: 0 auto;
+    box-shadow: 1px 0 2px rgba(0, 0, 0, 0.3);
+}
+
+.lantern {
+    width: 70px;
+    height: 90px;
+    background: radial-gradient(circle at 30% 30%, #ff4d4d, #990000);
+    border-radius: 25px;
+    border-top: 6px solid #FFD700;
+    border-bottom: 6px solid #FFD700;
+    box-shadow: 0 0 40px rgba(255, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin-top: -5px;
+    overflow: hidden;
+}
+
+/* Lantern Ribs */
+.lantern::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    background: repeating-linear-gradient(90deg, transparent, transparent 14px, rgba(0, 0, 0, 0.15) 14px, rgba(0, 0, 0, 0.15) 16px);
+    z-index: 1;
+}
+
+/* Lantern Glow Inner */
+.lantern::after {
+    content: '';
+    position: absolute;
+    inset: 10px;
+    background: radial-gradient(circle, rgba(255, 255, 0, 0.2), transparent 70%);
+    z-index: 0;
+}
+
+.lantern-text {
+    font-family: 'Dancing Script', cursive;
+    font-size: 2.2rem;
+    color: #FFD700;
+    font-weight: bold;
+    text-shadow: 1px 1px 0 #5e0000;
+    z-index: 2;
+    transform: rotate(-5deg);
+}
+
+.lantern-tassel {
+    width: 8px;
+    height: 50px;
+    background: #FFD700;
+    margin: 0 auto;
+    position: relative;
+    margin-top: 0px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.lantern-tassel::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 24px;
+    height: 60px;
+    background: repeating-linear-gradient(90deg, #d32f2f, #d32f2f 2px, #b71c1c 2px, #b71c1c 4px);
+    clip-path: polygon(0 0, 100% 0, 85% 100%, 15% 100%);
+}
+
+@keyframes lanternSway {
+    0% {
+        transform: rotate(-4deg);
+    }
+
+    100% {
+        transform: rotate(4deg);
+    }
+}
+
+/* ============================================
+   PREMIUM 3D GOLD COIN MASCOT
+   ============================================ */
+.mascot {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 140px;
+    height: 140px;
+    z-index: 9999 !important;
+    /* Force on top */
+    perspective: 1000px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.mascot-3d-scene {
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    animation: mascotFloat 5s ease-in-out infinite;
+    transition: transform 0.3s ease;
+}
+
+.mascot:hover .mascot-3d-scene {
+    transform: scale(1.1) rotateY(15deg);
+}
+
+.mascot-coin {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    animation: coinSpin 12s linear infinite;
+}
+
+@keyframes coinSpin {
+    0% {
+        transform: rotateY(0deg);
+    }
+
+    100% {
+        transform: rotateY(360deg);
+    }
+}
+
+/* Faces */
+.coin-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    backface-visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    /* Premium Gold Gradient */
+    background: conic-gradient(#B8860B 0deg,
+            #FFD700 45deg,
+            #FFF8DC 70deg,
+            #B8860B 100deg,
+            #FFD700 160deg,
+            #FFF8DC 190deg,
+            #B8860B 230deg,
+            #FFD700 280deg,
+            #B8860B 360deg);
+    border: 2px solid #DAA520;
+}
+
+.coin-face.front {
+    transform: translateZ(10px);
+}
+
+.coin-face.back {
+    transform: rotateY(180deg) translateZ(10px);
+}
+
+/* Outer Ring Texture */
+.coin-outer-ring {
+    position: absolute;
+    inset: 8px;
+    border-radius: 50%;
+    border: 1px solid rgba(139, 69, 19, 0.3);
+    background: conic-gradient(from 0deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.4) 15%,
+            transparent 30%);
+}
+
+.coin-dots {
+    position: absolute;
+    inset: 4px;
+    border-radius: 50%;
+    border: 2px dashed rgba(139, 69, 19, 0.4);
+}
+
+/* Inner Circle */
+.coin-inner {
+    position: relative;
+    width: 65%;
+    height: 65%;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #FFD700, #DAA520);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 0 2px 5px rgba(255, 255, 255, 0.5), inset 0 -2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.coin-text {
+    font-size: 56px;
+    font-weight: 900;
+    color: #8B0000;
+    /* Deep Red */
+    text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.4), -1px -1px 0 #5e0000;
+    font-family: 'Noto Serif SC', serif;
+    transform: translateY(-2px);
+}
+
+/* Shine Effect */
+.coin-shine {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, transparent 40%, transparent 60%, rgba(255, 255, 255, 0.3) 100%);
+    pointer-events: none;
+}
+
+/* Fake Extrusion (Sides) */
+.coin-side {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 50%;
+    background: #B8860B;
+    /* Dark Gold */
+    border: 1px solid #8B6508;
+}
+
+.coin-side.s1 {
+    transform: translateZ(8px);
+}
+
+.coin-side.s2 {
+    transform: translateZ(6px);
+}
+
+.coin-side.s3 {
+    transform: translateZ(4px);
+}
+
+.coin-side.s4 {
+    transform: translateZ(2px);
+}
+
+.coin-side.s5 {
+    transform: translateZ(0px);
+    background: #8B6508;
+}
+
+/* Float Animation */
+@keyframes mascotFloat {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-15px);
+    }
+}
+
+/* Mobile Adjustments */
+@media (max-width: 560px) {
+    .lantern-container.left {
+        left: 10px;
+    }
+
+    .lantern-container.right {
+        right: 10px;
+    }
+
+    .lantern {
+        width: 50px;
+        height: 65px;
+    }
+
+    .lantern-text {
+        font-size: 1.5rem;
+    }
+
+    .lantern-string {
+        height: 50px;
+    }
+
+    .mascot {
+        width: 100px;
+        height: 100px;
+        bottom: 10px;
+        right: 10px;
+    }
+
+    .coin-text {
+        font-size: 40px;
+    }
+}

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎰 Vòng Quay May Mắn - Lucky Spin Wheel</title>
+    <meta name="description" content="Vòng quay may mắn với nhiều giải thưởng hấp dẫn!">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Outfit:wght@400;600;700;800;900&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css?v=tet">
+    <link rel="stylesheet" href="css/tet.css?v=tet">
+</head>
+
+<body>
+    <!-- Particle Canvas Background -->
+    <canvas id="particleCanvas"></canvas>
+
+    <!-- Hanging Lanterns -->
+    <div class="lantern-container left">
+        <div class="lantern-string"></div>
+        <div class="lantern">
+            <div class="lantern-text">Xuân</div>
+        </div>
+        <div class="lantern-tassel"></div>
+    </div>
+    <div class="lantern-container right">
+        <div class="lantern-string"></div>
+        <div class="lantern">
+            <div class="lantern-text">Tết</div>
+        </div>
+        <div class="lantern-tassel"></div>
+    </div>
+    ...
+    <!-- Scripts -->
+    <script src="js/firebase-config.js?v=tet"></script>
+    <script src="js/firebase-auth.js?v=tet"></script>
+    <script src="js/sounds.js?v=tet"></script>
+    <script src="js/effects.js?v=tet"></script>
+    <script src="js/auth.js?v=tet"></script>
+    <script src="js/wheel.js?v=tet"></script>
+    <script src="js/admin.js?v=tet"></script>
+    <script src="js/app.js?v=tet"></script>
+
+    <!-- Hidden YouTube Player -->
+    <div id="player" style="position: absolute; top: -9999px; left: -9999px;"></div>
+
+    <!-- ==================== AUTH VIEW ==================== -->
+    <div id="authView" class="view active">
+        <div class="auth-container">
+            <!-- Animated Background Elements -->
+            <div class="auth-bg-shapes">
+                <div class="shape shape-1"></div>
+                <div class="shape shape-2"></div>
+                <div class="shape shape-3"></div>
+            </div>
+
+            <div class="auth-card glass-card tilt-effect">
+                <div class="auth-logo">
+                    <div class="logo-wheel-container">
+                        <div class="logo-wheel">🎰</div>
+                        <div class="logo-glow"></div>
+                    </div>
+                    <h1>Vòng Quay<br><span class="gradient-text">May Mắn</span></h1>
+                    <p class="auth-subtitle">Đăng nhập để thử vận may ngay!</p>
+                </div>
+
+                <!-- Google Login Only -->
+                <div class="auth-actions">
+                    <button class="btn btn-google-premium" id="googleLogin">
+                        <div class="btn-icon-wrapper">
+                            <svg viewBox="0 0 24 24" width="24" height="24">
+                                <path fill="#4285F4"
+                                    d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" />
+                                <path fill="#34A853"
+                                    d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                                <path fill="#FBBC05"
+                                    d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+                                <path fill="#EA4335"
+                                    d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+                            </svg>
+                        </div>
+                        <span class="btn-text">Tiếp tục với Google</span>
+                        <div class="btn-shine"></div>
+                    </button>
+
+                    <p class="auth-footer">
+                        Đăng nhập an toàn & bảo mật<br>
+                        <span class="secure-icon">🔒</span> by Firebase
+                    </p>
+                </div>
+
+                <!-- Error Message -->
+                <div id="authError" class="auth-error"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== WHEEL VIEW ==================== -->
+    <div id="wheelView" class="view">
+        <!-- Top Bar -->
+        <div class="top-bar glass-card">
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">👤</div>
+                <div class="user-details">
+                    <span class="user-name" id="userName">User</span>
+                    <span class="user-role" id="userRole">user</span>
+                </div>
+            </div>
+            <div class="top-bar-center">
+                <h2 class="page-title gradient-text">🎰 Vòng Quay May Mắn</h2>
+            </div>
+            <div class="top-bar-actions">
+                <div class="spins-remaining" id="spinsRemaining">
+                    <span class="spins-icon">🎫</span>
+                    <span class="spins-count" id="spinsCount">1</span>
+                    <span class="spins-label">lượt quay</span>
+                </div>
+                <button class="btn btn-icon btn-music" id="musicToggleBtn" title="Bật/Tắt Nhạc">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 18V5l12-2v13"></path>
+                        <circle cx="6" cy="18" r="3"></circle>
+                        <circle cx="18" cy="16" r="3"></circle>
+                    </svg>
+                </button>
+                <button class="btn btn-icon btn-next" id="nextTrackBtn" title="Bài Tiếp Theo">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="5 4 15 12 5 20 5 4"></polygon>
+                        <line x1="19" y1="5" x2="19" y2="19"></line>
+                    </svg>
+                </button>
+                <button class="btn btn-icon btn-admin" id="adminPanelBtn" title="Quản lý" style="display:none;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path
+                            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                        </path>
+                    </svg>
+                </button>
+                <button class="btn btn-icon btn-logout" id="logoutBtn" title="Đăng xuất">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="wheel-layout">
+            <!-- Wheel Section -->
+            <div class="wheel-section">
+                <div class="wheel-container">
+                    <div class="wheel-glow"></div>
+                    <div class="wheel-outer-ring">
+                        <div class="wheel-lights" id="wheelLights"></div>
+                        <canvas id="wheelCanvas" width="500" height="500"></canvas>
+                        <div class="wheel-center">
+                            <div class="wheel-center-inner">SPIN</div>
+                        </div>
+                    </div>
+                    <div class="wheel-pointer">
+                        <div class="pointer-arrow"></div>
+                    </div>
+                </div>
+                <button class="btn btn-spin btn-glow" id="spinBtn">
+                    <span>🎯 QUAY NGAY!</span>
+                    <div class="btn-shine"></div>
+                </button>
+                <p class="spin-hint" id="spinHint">Nhấn nút để quay vòng quay may mắn!</p>
+            </div>
+
+            <!-- History Sidebar -->
+            <div class="history-section glass-card">
+                <h3 class="history-title">📜 Lịch Sử Quay</h3>
+                <div class="history-list" id="historyList">
+                    <p class="history-empty">Chưa có lịch sử quay</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Premium 3D Coin Mascot -->
+        <div id="mascot" class="mascot">
+            <div class="mascot-3d-scene">
+                <div class="mascot-coin">
+                    <!-- Layered sides for 3D thickness (extrusion simulation) -->
+                    <div class="coin-side s1"></div>
+                    <div class="coin-side s2"></div>
+                    <div class="coin-side s3"></div>
+                    <div class="coin-side s4"></div>
+                    <div class="coin-side s5"></div>
+
+                    <!-- Faces -->
+                    <div class="coin-face front">
+                        <div class="coin-outer-ring">
+                            <div class="coin-dots"></div>
+                        </div>
+                        <div class="coin-inner">
+                            <span class="coin-text">福</span>
+                            <div class="coin-shine"></div>
+                        </div>
+                    </div>
+
+                    <div class="coin-face back">
+                        <div class="coin-outer-ring">
+                            <div class="coin-dots"></div>
+                        </div>
+                        <div class="coin-inner">
+                            <span class="coin-text">🪙</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- ==================== ADMIN PANEL ==================== -->
+        <div id="adminPanel" class="admin-panel">
+            <div class="admin-panel-overlay" id="adminOverlay"></div>
+            <div class="admin-panel-content glass-card">
+                <div class="admin-header">
+                    <h2>🛡️ Quản Lý Tài Khoản</h2>
+                    <button class="btn btn-icon btn-close-admin" id="closeAdminBtn">✕</button>
+                </div>
+                <div class="admin-search">
+                    <input type="text" id="adminSearchInput" class="admin-search-input"
+                        placeholder="🔍 Tìm kiếm tài khoản..." autocomplete="off">
+                </div>
+                <div class="admin-user-list" id="adminUserList">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== RESULT MODAL ==================== -->
+        <div id="resultModal" class="result-modal">
+            <div class="sunburst-bg"></div> <!-- Sunburst Effect -->
+            <div class="result-modal-content glass-card">
+                <div class="result-emoji" id="resultEmoji">🎉</div>
+                <h2 class="result-title" id="resultTitle">Chúc mừng!</h2>
+                <div class="result-prize" id="resultPrize">
+                    <span class="result-value gradient-text">100k</span>
+                </div>
+                <p class="result-message" id="resultMessage">Bạn đã trúng giải thưởng!</p>
+                <button class="btn btn-primary btn-glow" id="closeResultBtn">
+                    <span>Tuyệt vời! 🎊</span>
+                    <div class="btn-shine"></div>
+                </button>
+            </div>
+        </div>
+
+        <!-- Confetti Canvas -->
+        <canvas id="confettiCanvas"></canvas>
+
+        <!-- Firebase SDK (compat for simplicity) -->
+        <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+
+        <!-- Scripts -->
+        <script src="js/firebase-config.js?v=tet"></script>
+        <script src="js/firebase-auth.js?v=tet"></script>
+        <script src="js/sounds.js?v=tet"></script>
+        <script src="js/effects.js?v=tet"></script>
+        <script src="js/auth.js?v=tet"></script>
+        <script src="js/wheel.js?v=tet"></script>
+        <script src="js/admin.js?v=tet"></script>
+        <script src="js/app.js?v=tet"></script>
+</body>
+
+</html>
